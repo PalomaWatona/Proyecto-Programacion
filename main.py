@@ -37,7 +37,7 @@ def usuario():
             telefono = int(input("Ingrese el telefono del usuario (9 dígitos): "))
 
         direccion = input("Ingrese la dirección del usuario: ")
-        while direccion == "" or not direccion.isalpha():
+        while direccion == "":
             print("La dirección no puede quedar vacía")
             os.system("pause")
             direccion = input("Ingrese la dirección del usuario: ")
@@ -59,13 +59,13 @@ def usuario():
             "direccion": direccion,
             "correo": correo
     }
-        return datos_usuario
+        return print(f"Datos del usuario:\n{datos_usuario}")
     except:
         os.system("cls")
         print("Error al momento de crear usuario")
         os.system("pause")
         
-def vehiculo(usuarios): #EN PROCESO LA CREACION DE DICCIONARIO DE DATOS PARA ALMACENAR DATOS DE VEHICULOS (PROBVABLEMENTE EN OTRA FUNCION)
+def vehiculo(usuarios): 
     try:
         os.system("cls")
         print("Usuarios disponibles: ")
@@ -79,24 +79,24 @@ def vehiculo(usuarios): #EN PROCESO LA CREACION DE DICCIONARIO DE DATOS PARA ALM
                 print("rut invalido, volviendo a la creacion de vehiculo")
                 os.system("pause")
                 vehiculo(usuarios)
-        patente = input("Ingrese la patente del vehiculo: ")
+        patente = input("Ingrese la patente del vehiculo, debe tener entre 6 y 7 caracteres: ")
         while patente == "" or len(patente) < 6 or len(patente) > 7:
-            print("La patente no puede quedar vacía")
+            print("La patente no puede quedar vacía, debe tener entre 6 y 7 caracteres")
             patente = input("Ingrese la patente del vehiculo: ")
-        chasis = int(input("Ingrese el número de chasis del vehiculo: "))
+        chasis = int(input("Ingrese el número de chasis del vehiculo, debe tener entre 6 y 17 caracteres: "))
         while chasis == "" or chasis <= 0 or len(str(chasis)) < 6 or len(str(chasis)) > 17:
-            print("El número de chasis no puede quedar vacío")
+            print("El número de chasis no puede quedar vacío, debe tener entre 6 y 17 caracteres")
             chasis = int(input("Ingrese el número de chasis del vehiculo: "))
-        motor = int(input("Ingrese el número de motor del vehículo: "))
+        motor = int(input("Ingrese el número de motor del vehículo, debe tener entre 6 y 17 dígitos: "))
         while motor == "" or motor <= 0 or len(str(motor)) < 6 or len(str(motor)) > 17:
-            print("El número de motor no puede quedar vacío")
+            print("El número de motor no puede quedar vacío, debe tener entre 6 y 17 dígitos")
             motor = int(input("Ingrese el número de motor del vehículo: "))
         marca = input("Ingrese la marca del vehíchulo: ")
         while marca == "" or not marca.isalpha():
             print("La marca no puede quedar vacía")
             marca = input("Ingrese la marca del vehíchulo: ")
-        modelo = input("Ingrese el modelo del vehiculo: ")
-        while modelo == "" or not modelo.isalpha():
+        modelo = input("Ingrese el modelo del vehiculo,: ")
+        while modelo == "":
             print("El modelo no puede quedar vacío")
             modelo = input("Ingrese el modelo del vehiculo: ")
         color = input("Ingrese el color del vehiculo: ")
@@ -142,7 +142,6 @@ def poliza():
         while rut_usuario == "" or len(rut_usuario) < 8 or len(rut_usuario) > 9 or not rut_usuario.isdigit():
             print("El rut no puede quedar vacío, debe tener entre 8 y 9 dígitos")
             rut_usuario = input("Ingrese el rut del usuario: ")
-        #rut_usuario = VALIDAR CON RUT DE PERSONA
         os.system("cls")
         print("[1] Seguro automotriz")
         print("[2] Seguro de vida")
@@ -158,7 +157,6 @@ def poliza():
         patente = int(input("Ingrese la patente del vehiculo asegurado: "))
         while patente == "" or patente <= 0 or len(str(patente)) < 1:
             print("La patente del vehiculo asegurado no puede quedar vacío")
-        
         valor_anual = int(input("Ingrese el valor anual de su seguro: "))
         while valor_anual == "" or valor_anual <= 0 or len(str(valor_anual)) < 1:
             print("El valor anual no puede quedar vacío")
@@ -197,7 +195,7 @@ def siniestro():
         poliza_asociada = input("Ingrese la poliza de seguro asociada al siniestro: ")
         while poliza_asociada == "":
             print("La pooliza del seguro no puede quedar vacía")
-            informacion_siniestro = input("Ingrese la poliza del seguro asociado: ")
+            informacion_siniestro = input("Ingrese la poliza del seguro asociado al siniestro: ")
         #PARA LA POLIZA DEL SEGURO SE DEBE VALIDAR CON LAS POLIZAS ACTIVAS, SI ES QUE SE DEJA PARA DESPUES
         rut_siniestrado = input("Ingrese el RUT del conductor siniestrado: ")
         while rut_siniestrado == "" or len(rut_siniestrado) < 8 or len(rut_siniestrado) > 9 or not rut_siniestrado.isdigit():
@@ -248,7 +246,7 @@ polizas = {}
 accidentes = {}
 
 rut_agentes = [] #INVENTAR RUT DE AGENTES DE VENTA
-rut_usuarios = ["00.000.000-0"] #RUT DE USUARIOS QUE SE HAN INGRESADO
+rut_usuarios = [] #RUT DE USUARIOS QUE SE HAN INGRESADO
 
 
     #MENÚ PRINCIPAL
