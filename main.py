@@ -137,6 +137,11 @@ def poliza():
         while id_poliza == "" or id_poliza <= 0 or len(str(id_poliza)) < 1:
             print("El identificador de la póliza no puede quedar vacío")
             id_poliza = int(input("Ingrese el identificador de su póliza: "))
+        rut_usuario = input("Ingrese el rut del usuario (sin puntos y sin guion): ")
+        os.system("cls")
+        while rut_usuario == "" or len(rut_usuario) < 8 or len(rut_usuario) > 9 or not rut_usuario.isdigit():
+            print("El rut no puede quedar vacío, debe tener entre 8 y 9 dígitos")
+            rut_usuario = input("Ingrese el rut del usuario: ")
         #rut_usuario = VALIDAR CON RUT DE PERSONA
         os.system("cls")
         print("[1] Seguro automotriz")
@@ -150,6 +155,10 @@ def poliza():
             print("opcion invalida, redirigiendo a menu de creación de poliza")
             os.system("pause")
             poliza()
+        patente = int(input("Ingrese la patente del vehiculo asegurado: "))
+        while patente == "" or patente <= 0 or len(str(patente)) < 1:
+            print("La patente del vehiculo asegurado no puede quedar vacío")
+        
         valor_anual = int(input("Ingrese el valor anual de su seguro: "))
         while valor_anual == "" or valor_anual <= 0 or len(str(valor_anual)) < 1:
             print("El valor anual no puede quedar vacío")
@@ -185,7 +194,10 @@ def siniestro():
         informacion_siniestro = input("Ingrese información del siniestro: ")
         while informacion_siniestro == "":
             print("La información del siniestro no puede quedar vacía")
-            informacion_siniestro = input("Ingrese información del siniestro: ")
+        poliza_asociada = input("Ingrese la poliza de seguro asociada al siniestro: ")
+        while poliza_asociada == "":
+            print("La pooliza del seguro no puede quedar vacía")
+            informacion_siniestro = input("Ingrese la poliza del seguro asociado: ")
         #PARA LA POLIZA DEL SEGURO SE DEBE VALIDAR CON LAS POLIZAS ACTIVAS, SI ES QUE SE DEJA PARA DESPUES
         rut_siniestrado = input("Ingrese el RUT del conductor siniestrado: ")
         while rut_siniestrado == "" or len(rut_siniestrado) < 8 or len(rut_siniestrado) > 9 or not rut_siniestrado.isdigit():
