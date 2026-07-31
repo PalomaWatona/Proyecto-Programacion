@@ -1,7 +1,8 @@
 from datetime import datetime
 import os
 
-def usuario():
+#LISTO
+def usuario(usiarios):
     try:
         os.system("cls")
         rut = input("Ingrese el rut del usuario (sin puntos y sin guion): ")
@@ -37,7 +38,7 @@ def usuario():
             telefono = int(input("Ingrese el telefono del usuario (9 dígitos): "))
 
         direccion = input("Ingrese la dirección del usuario: ")
-        while direccion == "":
+        while direccion == "" or not direccion.isalpha():
             print("La dirección no puede quedar vacía")
             os.system("pause")
             direccion = input("Ingrese la dirección del usuario: ")
@@ -49,7 +50,7 @@ def usuario():
             correo = input("Ingrese el correo del usuario: ")
 
         
-        datos_usuario = {
+        usuarios[rut] = {
             "rut": rut,
             "nombre": nombre,
             "apellido_paterno": apellido_paterno,
@@ -59,13 +60,13 @@ def usuario():
             "direccion": direccion,
             "correo": correo
     }
-        return print(f"Datos del usuario:\n{datos_usuario}")
+        return usuarios
     except:
         os.system("cls")
         print("Error al momento de crear usuario")
         os.system("pause")
         
-def vehiculo(usuarios): 
+def vehiculo(usuarios): #EN PROCESO LA CREACION DE DICCIONARIO DE DATOS PARA ALMACENAR DATOS DE VEHICULOS (PROBVABLEMENTE EN OTRA FUNCION)
     try:
         os.system("cls")
         print("Usuarios disponibles: ")
@@ -79,24 +80,24 @@ def vehiculo(usuarios):
                 print("rut invalido, volviendo a la creacion de vehiculo")
                 os.system("pause")
                 vehiculo(usuarios)
-        patente = input("Ingrese la patente del vehiculo, debe tener entre 6 y 7 caracteres: ")
+        patente = input("Ingrese la patente del vehiculo: ")
         while patente == "" or len(patente) < 6 or len(patente) > 7:
-            print("La patente no puede quedar vacía, debe tener entre 6 y 7 caracteres")
+            print("La patente no puede quedar vacía")
             patente = input("Ingrese la patente del vehiculo: ")
-        chasis = int(input("Ingrese el número de chasis del vehiculo, debe tener entre 6 y 17 caracteres: "))
+        chasis = int(input("Ingrese el número de chasis del vehiculo: "))
         while chasis == "" or chasis <= 0 or len(str(chasis)) < 6 or len(str(chasis)) > 17:
-            print("El número de chasis no puede quedar vacío, debe tener entre 6 y 17 caracteres")
+            print("El número de chasis no puede quedar vacío")
             chasis = int(input("Ingrese el número de chasis del vehiculo: "))
-        motor = int(input("Ingrese el número de motor del vehículo, debe tener entre 6 y 17 dígitos: "))
+        motor = int(input("Ingrese el número de motor del vehículo: "))
         while motor == "" or motor <= 0 or len(str(motor)) < 6 or len(str(motor)) > 17:
-            print("El número de motor no puede quedar vacío, debe tener entre 6 y 17 dígitos")
+            print("El número de motor no puede quedar vacío")
             motor = int(input("Ingrese el número de motor del vehículo: "))
         marca = input("Ingrese la marca del vehíchulo: ")
         while marca == "" or not marca.isalpha():
             print("La marca no puede quedar vacía")
             marca = input("Ingrese la marca del vehíchulo: ")
-        modelo = input("Ingrese el modelo del vehiculo,: ")
-        while modelo == "":
+        modelo = input("Ingrese el modelo del vehiculo: ")
+        while modelo == "" or not modelo.isalpha():
             print("El modelo no puede quedar vacío")
             modelo = input("Ingrese el modelo del vehiculo: ")
         color = input("Ingrese el color del vehiculo: ")
@@ -142,6 +143,7 @@ def poliza():
         while rut_usuario == "" or len(rut_usuario) < 8 or len(rut_usuario) > 9 or not rut_usuario.isdigit():
             print("El rut no puede quedar vacío, debe tener entre 8 y 9 dígitos")
             rut_usuario = input("Ingrese el rut del usuario: ")
+        #rut_usuario = VALIDAR CON RUT DE PERSONA
         os.system("cls")
         print("[1] Seguro automotriz")
         print("[2] Seguro de vida")
@@ -157,6 +159,7 @@ def poliza():
         patente = int(input("Ingrese la patente del vehiculo asegurado: "))
         while patente == "" or patente <= 0 or len(str(patente)) < 1:
             print("La patente del vehiculo asegurado no puede quedar vacío")
+        
         valor_anual = int(input("Ingrese el valor anual de su seguro: "))
         while valor_anual == "" or valor_anual <= 0 or len(str(valor_anual)) < 1:
             print("El valor anual no puede quedar vacío")
@@ -179,9 +182,6 @@ def poliza():
         print("Error al momento de crear poliza")
         os.system("pause")
 
-        
-
-
 def siniestro():
     try:
         os.system("cls")
@@ -195,7 +195,7 @@ def siniestro():
         poliza_asociada = input("Ingrese la poliza de seguro asociada al siniestro: ")
         while poliza_asociada == "":
             print("La pooliza del seguro no puede quedar vacía")
-            informacion_siniestro = input("Ingrese la poliza del seguro asociado al siniestro: ")
+            informacion_siniestro = input("Ingrese la poliza del seguro asociado: ")
         #PARA LA POLIZA DEL SEGURO SE DEBE VALIDAR CON LAS POLIZAS ACTIVAS, SI ES QUE SE DEJA PARA DESPUES
         rut_siniestrado = input("Ingrese el RUT del conductor siniestrado: ")
         while rut_siniestrado == "" or len(rut_siniestrado) < 8 or len(rut_siniestrado) > 9 or not rut_siniestrado.isdigit():
@@ -239,6 +239,64 @@ def siniestro():
         print("Error al momento de crear siniestro")
         os.system("pause")
 
+#LISTO
+def listar_usuarios(usuarios):
+    os.system("cls")
+    
+    if not usuarios:
+        print("==========================================================")
+        print("           NO HAY USUARIOS REGISTRADOS EN EL SISTEMA       ")
+        print("==========================================================")
+        os.system("pause")
+        return
+
+    lista_ruts = list(usuarios.keys())
+    registros_por_pagina = 5
+    total_registros = len(lista_ruts)
+
+    for i in range(0, total_registros, registros_por_pagina):
+        os.system("cls")
+        
+        pagina_actual = (i // registros_por_pagina) + 1
+        total_paginas = (total_registros + registros_por_pagina - 1) // registros_por_pagina
+
+        print("==========================================================")
+        print(f"        LISTADO DE USUARIOS (Página {pagina_actual} de {total_paginas})")
+        print(f"        Total registrados: {total_registros}")
+        print("==========================================================")
+
+        bloque = lista_ruts[i : i + registros_por_pagina]
+        
+        for num, rut in enumerate(bloque, start=i + 1):
+            datos = usuarios[rut]
+            nombre_completo = f"{datos['nombre']} {datos['apellido_paterno']} {datos['apellido_materno']}"
+            fecha_str = datos['fecha_nacimiento'].strftime('%d/%m/%Y') if hasattr(datos['fecha_nacimiento'], 'strftime') else str(datos['fecha_nacimiento'])
+
+            print(f"[{num}] RUT: {datos['rut']}")
+            print(f"    Nombre:    {nombre_completo}")
+            print(f"    Nacimiento:{fecha_str}")
+            print(f"    Teléfono:  +56 {datos['telefono']}")
+            print(f"    Dirección: {datos['direccion']}")
+            print(f"    Correo:    {datos['correo']}")
+            print("-" * 58)
+
+        if i + registros_por_pagina < total_registros:
+            input("\nPresione ENTER para ver la siguiente página...")
+
+    print("\nFin del listado.")
+    os.system("pause")
+
+def listar_vehiculos():
+    pass
+
+def listar_polizas():
+    pass
+
+def listar_siniestros():
+    pass
+
+    
+
 #DEFINICIÓN DE VARIABLES A UTILIZAR
 usuarios = {}
 vehiculos = {}
@@ -246,21 +304,28 @@ polizas = {}
 accidentes = {}
 
 rut_agentes = [] #INVENTAR RUT DE AGENTES DE VENTA
-rut_usuarios = [] #RUT DE USUARIOS QUE SE HAN INGRESADO
+rut_usuarios = ["00.000.000-0"] #RUT DE USUARIOS QUE SE HAN INGRESADO
 
 
     #MENÚ PRINCIPAL
 while True:
     print("############################################################")
+    print("#########################REGISTROS##########################")
     print("[1] Registrar usuario")
     print("[2] Registrar vehiculo (Debe tener propietario)")
     print("[3] Registrar póliza (Debe existir usuario con vehiculo)")
     print("[4] Registrar siniestro (Debe existir vehiculo y póliza)")
-    print("[5] Salir")
+    print("")
+    print("#########################CONSULTAS##########################")
+    print("[5] Listar usuarios")
+    print("[6] Listar Vehiculos")
+    print("[7] Listar pólizas")
+    print("[8] Listar siniestros")
+
+    print("[0] Salir")
     print("############################################################")
     
     try:
-        os.system("cls")
         opcion = int(input("Ingrese su opción: "))
         os.system("cls")
     except ValueError:
@@ -269,14 +334,25 @@ while True:
         continue
 
     if opcion == 1:
-        usuario()
+        usuarios = usuario(usuarios)
     elif opcion == 2:
         datos = vehiculo(rut_usuarios)
     elif opcion == 3:
         poliza()
     elif opcion == 4:
         siniestro()
+
     elif opcion == 5:
+        listar_usuarios(usuarios)
+        input("Presiona Enter para reintentar...")
+        continue
+    elif opcion == 6:
+        listar_vehiculos()
+    elif opcion == 7:
+        listar_polizas()
+    elif opcion == 8:
+        listar_siniestros()
+    elif opcion == 0:
         print("\nGracias por utilizar el programa :D")
         input("Presiona Enter para salir...")
         break
