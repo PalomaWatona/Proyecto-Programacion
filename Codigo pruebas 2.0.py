@@ -379,7 +379,7 @@ def siniestro(usuarios, vehiculos, polizas, siniestros):
 # ============================================================
 
 def consultar_vehiculo_por_patente(vehiculos, usuarios):
-    """Ejercicio 7: busca un vehículo por su patente y muestra sus datos
+    """Busca un vehículo por su patente y muestra sus datos
     junto con el nombre del propietario."""
     os.system("cls")
     print("7. Consultar vehículo por patente\n")
@@ -415,7 +415,7 @@ def consultar_vehiculo_por_patente(vehiculos, usuarios):
 
 
 def consultar_poliza(polizas):
-    """Ejercicio 8: busca una póliza por su ID y muestra sus datos principales."""
+    """Busca una póliza por su ID y muestra sus datos principales."""
     os.system("cls")
     print("8. Consultar póliza\n")
 
