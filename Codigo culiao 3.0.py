@@ -54,31 +54,32 @@ def mostrar_encabezado(titulo, mostrar_uf=False):
 # 1. MÓDULOS DE REGISTRO
 # ============================================================
 
+#FUNCIÓN REGISTRAR USUARIO
 def usuario(usuarios):
     try:
         mostrar_encabezado("REGISTRO DE NUEVO CLIENTE")
         print(f"{C_YELLOW}Complete los siguientes datos:{C_RESET}\n")
 
         rut = input(f"  {C_GREEN}[+]{C_RESET} Ingrese el RUT (sin puntos y sin guion): ")
-        while rut == "" or len(rut) < 8 or len(rut) > 9 or not rut.isdigit():
+        while rut == "" or len(rut) < 8 or len(rut) > 9 or not rut.isdigit(): #VALIDACIÓN RUT
             mostrar_encabezado("REGISTRO DE NUEVO CLIENTE")
             print(f"      {C_RED}[!] Error: El RUT debe tener entre 8 y 9 dígitos.{C_RESET}")
             rut = input(f"  {C_GREEN}[+]{C_RESET} Ingrese el RUT nuevamente: ")
 
         nombre = input(f"  {C_GREEN}[+]{C_RESET} Ingrese el nombre: ")
-        while nombre == "" or not nombre.isalpha():
+        while nombre == "" or not nombre.isalpha(): #VALIDACIÓN NOMBRE
             mostrar_encabezado("REGISTRO DE NUEVO CLIENTE")
             print(f"      {C_RED}[!] Error: El nombre no puede quedar vacío y debe contener solo letras.{C_RESET}")
             nombre = input(f"  {C_GREEN}[+]{C_RESET} Ingrese el nombre: ")
 
         apellido_paterno = input(f"  {C_GREEN}[+]{C_RESET} Ingrese el apellido paterno: ")
-        while apellido_paterno == "" or not apellido_paterno.isalpha():
+        while apellido_paterno == "" or not apellido_paterno.isalpha(): #VALIDACIÓN APELLIDO PATERNO
             mostrar_encabezado("REGISTRO DE NUEVO CLIENTE")
             print(f"      {C_RED}[!] Error: El apellido paterno no puede quedar vacío y debe ser solo letras.{C_RESET}")
             apellido_paterno = input(f"  {C_GREEN}[+]{C_RESET} Ingrese el apellido paterno: ")
 
         apellido_materno = input(f"  {C_GREEN}[+]{C_RESET} Ingrese el apellido materno: ")
-        while apellido_materno == "" or not apellido_materno.isalpha():
+        while apellido_materno == "" or not apellido_materno.isalpha(): #VALIDACIÓN APELLIDO MATERNO
             mostrar_encabezado("REGISTRO DE NUEVO CLIENTE")
             print(f"      {C_RED}[!] Error: El apellido materno no puede quedar vacío y debe ser solo letras.{C_RESET}")
             apellido_materno = input(f"  {C_GREEN}[+]{C_RESET} Ingrese el apellido materno: ")
@@ -87,7 +88,7 @@ def usuario(usuarios):
         while not fecha_valida:
             nacimiento = input(f"  {C_GREEN}[+]{C_RESET} Ingrese la fecha de nacimiento (DD/MM/AAAA): ")
             try:
-                fecha_nacimiento = datetime.strptime(nacimiento, "%d/%m/%Y").date()
+                fecha_nacimiento = datetime.strptime(nacimiento, "%d/%m/%Y").date() #SE CONVIERTE LA FECHA DE NACIMIENTO EN DATE
                 fecha_valida = True
             except ValueError:
                 mostrar_encabezado("REGISTRO DE NUEVO CLIENTE")
@@ -97,7 +98,7 @@ def usuario(usuarios):
         while not telefono_valido:
             try:
                 telefono = int(input(f"  {C_GREEN}[+]{C_RESET} Ingrese el teléfono (9 dígitos): "))
-                if len(str(telefono)) != 9:
+                if len(str(telefono)) != 9: #VALIDACIÓN NÚMERO DE TELÉFONO
                     mostrar_encabezado("REGISTRO DE NUEVO CLIENTE")
                     print(f"      {C_RED}[!] Error: El teléfono debe tener exactamente 9 dígitos.{C_RESET}")
                 else:
@@ -107,17 +108,18 @@ def usuario(usuarios):
                 print(f"      {C_RED}[!] Error: El teléfono debe ser un valor numérico.{C_RESET}")
 
         direccion = input(f"  {C_GREEN}[+]{C_RESET} Ingrese la dirección: ")
-        while direccion == "":
+        while direccion == "": #VALIDACIÓN DIRECCIÓN
             mostrar_encabezado("REGISTRO DE NUEVO CLIENTE")
             print(f"      {C_RED}[!] Error: La dirección no puede quedar vacía.{C_RESET}")
             direccion = input(f"  {C_GREEN}[+]{C_RESET} Ingrese la dirección: ")
 
         correo = input(f"  {C_GREEN}[+]{C_RESET} Ingrese el correo electrónico: ")
-        while correo == "" or "@" not in correo or "." not in correo:
+        while correo == "" or "@" not in correo or "." not in correo: #VALIDACIÓN CORREO ELECTRÓNICO
             mostrar_encabezado("REGISTRO DE NUEVO CLIENTE")
             print(f"      {C_RED}[!] Error: El correo debe tener un formato válido.{C_RESET}")
             correo = input(f"  {C_GREEN}[+]{C_RESET} Ingrese el correo electrónico: ")
-        
+
+        #SE GUARDAN LOS DATOS DEL USUARIO EN UN DICCIONARIO
         usuarios[rut] = {
             "rut": rut,
             "nombre": nombre,
@@ -129,6 +131,7 @@ def usuario(usuarios):
             "correo": correo
         }
 
+        #SE RETORNA EL USUARIO CREADO PARA GUARDARLO FUERA DE LA FUNCIÓN
         print(f"\n{C_GREEN}══════════════════════════════════════════════════════════════{C_RESET}")
         print(f" {C_GREEN}[✓] ¡Cliente {nombre.upper()} {apellido_paterno.upper()} registrado con éxito!{C_RESET}")
         print(f"{C_GREEN}══════════════════════════════════════════════════════════════{C_RESET}\n")
@@ -139,6 +142,7 @@ def usuario(usuarios):
         input(f"\n{C_BOLD}Presione Enter para continuar...{C_RESET}")
         return usuarios
 
+#FUNCIÓN REGISTRAR VEHÍCULO (SE NECESITA MÍNIMO UN USUARIO)
 def vehiculo(usuarios, vehiculos):
     try:
         mostrar_encabezado("REGISTRO DE VEHÍCULO")
@@ -151,13 +155,13 @@ def vehiculo(usuarios, vehiculos):
         print(f"{C_YELLOW}Clientes disponibles (RUT):{C_RESET} {list(usuarios.keys())}\n")
 
         rut_usuario = input(f"  {C_GREEN}[+]{C_RESET} Ingrese el RUT del propietario: ")
-        while rut_usuario not in usuarios:
+        while rut_usuario not in usuarios: #VALIDACIÓN RUT DEL PROPIETARIO DEL VEHICULO (DEBE EXISTIR UN RUT)
             mostrar_encabezado("REGISTRO DE VEHÍCULO")
             print(f"      {C_RED}[!] Error: El RUT ingresado no está registrado.{C_RESET}")
             rut_usuario = input(f"  {C_GREEN}[+]{C_RESET} Ingrese el RUT del propietario: ")
 
         patente = input(f"  {C_GREEN}[+]{C_RESET} Ingrese la patente del vehículo: ").strip().upper()
-        while patente == "" or len(patente) < 6 or len(patente) > 7:
+        while patente == "" or len(patente) < 6 or len(patente) > 7: #VALIDACIÓN PATENTE DEL VEHICULO
             mostrar_encabezado("REGISTRO DE VEHÍCULO")
             print(f"      {C_RED}[!] Error: La patente debe tener entre 6 y 7 caracteres.{C_RESET}")
             patente = input(f"  {C_GREEN}[+]{C_RESET} Ingrese la patente del vehículo: ").strip().upper()
@@ -166,7 +170,7 @@ def vehiculo(usuarios, vehiculos):
         while not chasis_valido:
             try:
                 chasis = int(input(f"  {C_GREEN}[+]{C_RESET} Ingrese el número de chasis: "))
-                if chasis <= 0 or len(str(chasis)) < 6 or len(str(chasis)) > 17:
+                if chasis <= 0 or len(str(chasis)) < 6 or len(str(chasis)) > 17: #VALIDACIÓN NÚMEROO DE CHASIS
                     mostrar_encabezado("REGISTRO DE VEHÍCULO")
                     print(f"      {C_RED}[!] Error: El chasis debe tener entre 6 y 17 dígitos.{C_RESET}")
                 else:
@@ -179,7 +183,7 @@ def vehiculo(usuarios, vehiculos):
         while not motor_valido:
             try:
                 motor = int(input(f"  {C_GREEN}[+]{C_RESET} Ingrese el número de motor: "))
-                if motor <= 0 or len(str(motor)) < 6 or len(str(motor)) > 17:
+                if motor <= 0 or len(str(motor)) < 6 or len(str(motor)) > 17: #VALIDACIÓN NÚMERO DE MOTOR
                     mostrar_encabezado("REGISTRO DE VEHÍCULO")
                     print(f"      {C_RED}[!] Error: El motor debe tener entre 6 y 17 dígitos.{C_RESET}")
                 else:
@@ -189,19 +193,19 @@ def vehiculo(usuarios, vehiculos):
                 print(f"      {C_RED}[!] Error: El motor debe ser numérico.{C_RESET}")
 
         marca = input(f"  {C_GREEN}[+]{C_RESET} Ingrese la marca del vehículo: ")
-        while marca == "" or not marca.isalpha():
+        while marca == "" or not marca.isalpha(): #VALIDACIÓN MARCA DEL VEHÍCULO
             mostrar_encabezado("REGISTRO DE VEHÍCULO")
             print(f"      {C_RED}[!] Error: La marca no puede quedar vacía y debe contener solo letras.{C_RESET}")
             marca = input(f"  {C_GREEN}[+]{C_RESET} Ingrese la marca del vehículo: ")
 
         modelo = input(f"  {C_GREEN}[+]{C_RESET} Ingrese el modelo del vehículo: ")
-        while modelo == "":
+        while modelo == "": #VALIDACIÓN MODELO DEL VEHÍCULO
             mostrar_encabezado("REGISTRO DE VEHÍCULO")
             print(f"      {C_RED}[!] Error: El modelo no puede quedar vacío.{C_RESET}")
             modelo = input(f"  {C_GREEN}[+]{C_RESET} Ingrese el modelo del vehículo: ")
 
         color = input(f"  {C_GREEN}[+]{C_RESET} Ingrese el color del vehículo: ")
-        while color == "" or not color.isalpha():
+        while color == "" or not color.isalpha(): #VALIDACIÓN COLOR DEL VEHÍCULO
             mostrar_encabezado("REGISTRO DE VEHÍCULO")
             print(f"      {C_RED}[!] Error: El color no puede quedar vacío y debe contener solo letras.{C_RESET}")
             color = input(f"  {C_GREEN}[+]{C_RESET} Ingrese el color del vehículo: ")
@@ -210,7 +214,7 @@ def vehiculo(usuarios, vehiculos):
         while not anio_valido:
             try:
                 anio = int(input(f"  {C_GREEN}[+]{C_RESET} Ingrese el año del vehículo: "))
-                if anio <= 0 or anio > datetime.now().year:
+                if anio <= 0 or anio > datetime.now().year: #VALIDACIÓN AÑO DEL VEHICULO
                     mostrar_encabezado("REGISTRO DE VEHÍCULO")
                     print(f"      {C_RED}[!] Error: El año no puede ser negativo, cero o mayor al actual.{C_RESET}")
                 else:
@@ -219,6 +223,7 @@ def vehiculo(usuarios, vehiculos):
                 mostrar_encabezado("REGISTRO DE VEHÍCULO")
                 print(f"      {C_RED}[!] Error: El año debe ser un valor numérico.{C_RESET}")
 
+        #SE GUARDAN LOS DATOS DEL VEHICULO EN UN DICCIONARIO
         vehiculos[patente] = {
             "rut_duenio": rut_usuario,
             "patente": patente,
@@ -229,7 +234,8 @@ def vehiculo(usuarios, vehiculos):
             "color": color,
             "anio": anio
         }
-        
+
+        #SE RETORNA EL VEHICULO CREADO PARA GUARDARLO FUERA DE LA FUNCIÓN
         print(f"\n{C_GREEN}══════════════════════════════════════════════════════════════{C_RESET}")
         print(f" {C_GREEN}[✓] ¡Vehículo patente {patente.upper()} registrado con éxito!{C_RESET}")
         print(f"{C_GREEN}══════════════════════════════════════════════════════════════{C_RESET}\n")
@@ -241,6 +247,7 @@ def vehiculo(usuarios, vehiculos):
         input(f"\n{C_BOLD}Presione Enter para continuar...{C_RESET}")
         return vehiculos
 
+#FUNCIÓN REGISTRAR POLIZA (SE NECESITA MÍNIMO UN USUARIO Y UN VEHICULO)
 def poliza(usuarios, vehiculos, polizas):
     try:
         mostrar_encabezado("REGISTRO DE PÓLIZA", mostrar_uf=True)
@@ -251,7 +258,7 @@ def poliza(usuarios, vehiculos, polizas):
             return polizas
 
         rut_agente = input(f"  {C_GREEN}[+]{C_RESET} Ingrese el RUT del agente de ventas: ")
-        while rut_agente == "" or len(rut_agente) < 8 or len(rut_agente) > 9 or not rut_agente.isdigit():
+        while rut_agente == "" or len(rut_agente) < 8 or len(rut_agente) > 9 or not rut_agente.isdigit(): #VALIDACIÓN RUT DE AGENTE DE VENTA
             mostrar_encabezado("REGISTRO DE PÓLIZA", mostrar_uf=True)
             print(f"      {C_RED}[!] Error: El RUT del agente debe tener entre 8 y 9 dígitos.{C_RESET}")
             rut_agente = input(f"  {C_GREEN}[+]{C_RESET} Ingrese el RUT del agente de ventas: ")
@@ -261,7 +268,7 @@ def poliza(usuarios, vehiculos, polizas):
             ultimo_id = max(polizas.keys()) if polizas else 0
             sugerencia = f" (Último registrado: {ultimo_id}, Sugerir: {ultimo_id+1})" if ultimo_id > 0 else ""
             
-            try:
+            try: #VALIDACIÓN DE NÚMERO DE PÓLIZA
                 id_poliza = int(input(f"\n  {C_GREEN}[+]{C_RESET} Ingrese el número de la póliza{C_YELLOW}{sugerencia}{C_RESET}: "))
                 if id_poliza <= 0:
                     mostrar_encabezado("REGISTRO DE PÓLIZA", mostrar_uf=True)
@@ -276,7 +283,7 @@ def poliza(usuarios, vehiculos, polizas):
                 print(f"      {C_RED}[!] Error: El identificador debe ser numérico.{C_RESET}")
 
         rut_usuario = input(f"  {C_GREEN}[+]{C_RESET} Ingrese el RUT del cliente contratante: ")
-        while rut_usuario not in usuarios:
+        while rut_usuario not in usuarios: #VALIDACIÓN DE RUT DE CLIENTE (DEBE EXISTIR)
             mostrar_encabezado("REGISTRO DE PÓLIZA", mostrar_uf=True)
             print(f"      {C_RED}[!] Error: El RUT no corresponde a un cliente registrado.{C_RESET}")
             rut_usuario = input(f"  {C_GREEN}[+]{C_RESET} Ingrese el RUT del cliente contratante: ")
@@ -286,7 +293,7 @@ def poliza(usuarios, vehiculos, polizas):
             print(f"\n  {C_YELLOW}Seleccione el tipo de seguro:{C_RESET}")
             print(f"    [{C_CYAN}1{C_RESET}] Seguro automotriz")
             print(f"    [{C_CYAN}2{C_RESET}] Seguro de vida")
-            try:
+            try: #VALIDACIÓN TIPO DE SEGURO
                 opcion = int(input(f"  {C_GREEN}[+]{C_RESET} Opción: "))
                 if opcion == 1:
                     tipo_seguro = "Automotriz"
@@ -301,6 +308,7 @@ def poliza(usuarios, vehiculos, polizas):
                 mostrar_encabezado("REGISTRO DE PÓLIZA", mostrar_uf=True)
                 print(f"      {C_RED}[!] Error: Debe ingresar un número.{C_RESET}")
 
+        #POR LO MENOS DEBE HABER UN VEHÍCULO REGISTRADO
         if tipo_seguro == "Automotriz":
             if not vehiculos:
                 print(f"\n  {C_RED}[!] Error: No hay vehículos registrados. Registre uno primero para contratar seguro automotriz.{C_RESET}")
@@ -308,7 +316,7 @@ def poliza(usuarios, vehiculos, polizas):
                 return polizas
                 
             patente = input(f"\n  {C_GREEN}[+]{C_RESET} Ingrese la patente del vehículo asegurado: ").strip().upper()
-            while patente not in vehiculos:
+            while patente not in vehiculos: #LA PATENTE DEBE COINCIDIR CON EL VEHICULO
                 mostrar_encabezado("REGISTRO DE PÓLIZA", mostrar_uf=True)
                 print(f"      {C_RED}[!] Error: La patente no corresponde a un vehículo registrado.{C_RESET}")
                 patente = input(f"  {C_GREEN}[+]{C_RESET} Ingrese la patente del vehículo asegurado: ").strip().upper()
@@ -320,7 +328,7 @@ def poliza(usuarios, vehiculos, polizas):
         while not fecha_ini_valida:
             inicio_str = input(f"\n  {C_GREEN}[+]{C_RESET} Ingrese fecha de inicio de cobertura (DD/MM/AAAA): ")
             try:
-                fecha_inicio = datetime.strptime(inicio_str, "%d/%m/%Y").date()
+                fecha_inicio = datetime.strptime(inicio_str, "%d/%m/%Y").date() #LA FECHA DE COBERTURA SE TRANSFORMA AL FORMATO DATE
                 fecha_ini_valida = True
             except ValueError:
                 mostrar_encabezado("REGISTRO DE PÓLIZA", mostrar_uf=True)
@@ -330,7 +338,7 @@ def poliza(usuarios, vehiculos, polizas):
         while not vigencia_valida:
             try:
                 vigencia_meses = int(input(f"  {C_GREEN}[+]{C_RESET} Ingrese la duración en meses (Mínimo 12): "))
-                if vigencia_meses < 12:
+                if vigencia_meses < 12: #VALIDACIÓN DE MESES DE VIGENCIA
                     mostrar_encabezado("REGISTRO DE PÓLIZA", mostrar_uf=True)
                     print(f"      {C_RED}[!] Error: El periodo mínimo de vigencia es de 12 meses.{C_RESET}")
                 else:
@@ -339,26 +347,26 @@ def poliza(usuarios, vehiculos, polizas):
                 mostrar_encabezado("REGISTRO DE PÓLIZA", mostrar_uf=True)
                 print(f"      {C_RED}[!] Error: Debe ingresar un número entero.{C_RESET}")
 
-        # Cálculo preciso de la fecha de fin considerando meses
+        #CÁLCULO PRECISO DE LA FECHA DE FIN DE VIGENCIA CONSIDERANDO MESES
         año_fin = fecha_inicio.year + (fecha_inicio.month + vigencia_meses - 1) // 12
         mes_fin = (fecha_inicio.month + vigencia_meses - 1) % 12 + 1
         _, ultimo_dia_mes = calendar.monthrange(año_fin, mes_fin)
         dia_fin = min(fecha_inicio.day, ultimo_dia_mes)
         fecha_fin = datetime(año_fin, mes_fin, dia_fin).date()
 
-        # Evaluación del Estado
+        #EVALUACIÓN DEL ESTADO
         if fecha_fin < datetime.now().date():
             estado_poliza = "De baja"
             print(f"\n      {C_YELLOW}[!] Aviso: La fecha de fin calculada ({fecha_fin.strftime('%d/%m/%Y')}) ya pasó. La póliza se guardará como 'De baja'.{C_RESET}")
         else:
             estado_poliza = "Vigente"
 
-        # Precios
+        #PRECIOS
         valor_valido = False
         while not valor_valido:
             try:
                 valor_anual = float(input(f"\n  {C_GREEN}[+]{C_RESET} Ingrese el valor anual de la póliza en UF: "))
-                if valor_anual <= 0:
+                if valor_anual <= 0: #VALIDACIÓN DEL VALOR ANUAL DE LA PÓLIZA
                     mostrar_encabezado("REGISTRO DE PÓLIZA", mostrar_uf=True)
                     print(f"      {C_RED}[!] Error: El valor anual debe ser positivo.{C_RESET}")
                 else:
@@ -373,7 +381,7 @@ def poliza(usuarios, vehiculos, polizas):
         while not cobertura_valida:
             try:
                 cobertura = float(input(f"  {C_GREEN}[+]{C_RESET} Ingrese la cobertura máxima de la póliza en UF: "))
-                if cobertura <= 0:
+                if cobertura <= 0: #VALIDACIÓN DE COBERTURA MÁXIMA DE LA PÓLIZA
                     mostrar_encabezado("REGISTRO DE PÓLIZA", mostrar_uf=True)
                     print(f"      {C_RED}[!] Error: La cobertura debe ser positiva.{C_RESET}")
                 else:
@@ -384,7 +392,7 @@ def poliza(usuarios, vehiculos, polizas):
 
         print(f"      {C_CYAN}[i] Equivalente cobertura: {formato_clp(uf_a_clp(cobertura))}{C_RESET}\n")
 
-        # LÓGICA DE CANCELACIÓN AUTOMÁTICA DE PÓLIZAS ANTERIORES
+        #LÓGICA DE CANCELACIÓN AUTOMÁTICA DE PÓLIZAS ANTERIORES
         if estado_poliza == "Vigente":
             if tipo_seguro == "Automotriz":
                 for p_id, p_datos in polizas.items():
@@ -397,6 +405,7 @@ def poliza(usuarios, vehiculos, polizas):
                         polizas[p_id]['estado'] = "De baja"
                         print(f"      {C_YELLOW}[!] IMPORTANTE: La póliza de vida anterior N° {p_id} ha quedado 'De baja' automáticamente.{C_RESET}")
 
+        #SE GUARDAN LOS DATOS DE LA PÓLIZA EN UN DICCIONARIO
         polizas[id_poliza] = {
             "rut_agente": rut_agente,
             "id_poliza": id_poliza,
@@ -409,7 +418,8 @@ def poliza(usuarios, vehiculos, polizas):
             "cobertura": cobertura,     
             "estado": estado_poliza
         }
-        
+
+        #SE RETORNA LA PÓLIZA CREADA PARA GUARDARLA FUERA DE LA FUNCIÓN
         print(f"\n{C_GREEN}══════════════════════════════════════════════════════════════{C_RESET}")
         print(f" {C_GREEN}[✓] ¡Póliza N° {id_poliza} registrada con éxito!{C_RESET}")
         print(f"{C_GREEN}══════════════════════════════════════════════════════════════{C_RESET}\n")
@@ -421,6 +431,7 @@ def poliza(usuarios, vehiculos, polizas):
         input(f"\n{C_BOLD}Presione Enter para continuar...{C_RESET}")
         return polizas
 
+#FUNCIÓN REGISTRAR PÓLIZA (SE NECESITA MÍNIMO UN USUARIO, UN VEHICULO Y UNA PÓLIZA)
 def siniestro(vehiculos, polizas, siniestros):
     try:
         mostrar_encabezado("REGISTRO DE SINIESTRO", mostrar_uf=True)
@@ -435,7 +446,7 @@ def siniestro(vehiculos, polizas, siniestros):
             ultimo_id = max(siniestros.keys()) if siniestros else 0
             sugerencia = f" (Último registrado: {ultimo_id}, Sugerir: {ultimo_id+1})" if ultimo_id > 0 else ""
             
-            try:
+            try: #VALIDACIÓN NÚMERO DE SINIESTRO
                 numero_declaracion = int(input(f"\n  {C_GREEN}[+]{C_RESET} Ingrese el número del siniestro{C_YELLOW}{sugerencia}{C_RESET}: "))
                 if numero_declaracion <= 0:
                     mostrar_encabezado("REGISTRO DE SINIESTRO", mostrar_uf=True)
@@ -451,7 +462,7 @@ def siniestro(vehiculos, polizas, siniestros):
 
         poliza_valida = False
         while not poliza_valida:
-            try:
+            try: #VALIDACIÓN NÚMERO DE PÓLIZA ASOCIADA
                 poliza_asociada = int(input(f"  {C_GREEN}[+]{C_RESET} Ingrese el número de la póliza asociada: "))
                 if poliza_asociada not in polizas:
                     mostrar_encabezado("REGISTRO DE SINIESTRO", mostrar_uf=True)
@@ -467,13 +478,13 @@ def siniestro(vehiculos, polizas, siniestros):
         cobertura_maxima = poliza_ref['cobertura']
 
         informacion_siniestro = input(f"  {C_GREEN}[+]{C_RESET} Ingrese descripción del siniestro: ")
-        while informacion_siniestro == "":
+        while informacion_siniestro == "": #VALIDACIÓN DE DESCRIPCIÓN DE SINIESTRO
             mostrar_encabezado("REGISTRO DE SINIESTRO", mostrar_uf=True)
             print(f"      {C_RED}[!] Error: La información no puede quedar vacía.{C_RESET}")
             informacion_siniestro = input(f"  {C_GREEN}[+]{C_RESET} Ingrese descripción del siniestro: ")
 
         rut_siniestrado = input(f"  {C_GREEN}[+]{C_RESET} Ingrese el RUT del conductor/afectado: ")
-        while rut_siniestrado == "" or len(rut_siniestrado) < 8 or len(rut_siniestrado) > 9 or not rut_siniestrado.isdigit():
+        while rut_siniestrado == "" or len(rut_siniestrado) < 8 or len(rut_siniestrado) > 9 or not rut_siniestrado.isdigit(): #VALIDACIÓN DE RUT DE SINIESTRADO
             mostrar_encabezado("REGISTRO DE SINIESTRO", mostrar_uf=True)
             print(f"      {C_RED}[!] Error: El RUT debe tener entre 8 y 9 dígitos.{C_RESET}")
             rut_siniestrado = input(f"  {C_GREEN}[+]{C_RESET} Ingrese el RUT del conductor/afectado: ")
@@ -481,8 +492,8 @@ def siniestro(vehiculos, polizas, siniestros):
         fecha_valida = False
         while not fecha_valida:
             fecha = input(f"  {C_GREEN}[+]{C_RESET} Ingrese la fecha de ocurrencia (DD/MM/AAAA): ")
-            try:
-                fecha_siniestro = datetime.strptime(fecha, "%d/%m/%Y").date()
+            try: #VALIDACIÓN DE FECHA DE OCURRENCIA
+                fecha_siniestro = datetime.strptime(fecha, "%d/%m/%Y").date() #SE TRANSFORMA LA FECHA DE OCURRENCIA EN DATE
                 if fecha_siniestro > datetime.now().date():
                     mostrar_encabezado("REGISTRO DE SINIESTRO", mostrar_uf=True)
                     print(f"      {C_RED}[!] Error: La fecha no puede ser futura.{C_RESET}")
@@ -494,13 +505,13 @@ def siniestro(vehiculos, polizas, siniestros):
 
         if tipo_seguro_asociado == "Automotriz":
             patente = input(f"  {C_GREEN}[+]{C_RESET} Ingrese la patente del vehículo siniestrado: ").strip().upper()
-            while patente not in vehiculos:
+            while patente not in vehiculos: #VALIDACIÓN DE PATENTE DEL VEHICULO SINIESTRADO
                 mostrar_encabezado("REGISTRO DE SINIESTRO", mostrar_uf=True)
                 print(f"      {C_RED}[!] Error: La patente no corresponde a un vehículo registrado.{C_RESET}")
                 patente = input(f"  {C_GREEN}[+]{C_RESET} Ingrese la patente del vehículo siniestrado: ").strip().upper()
 
             taller = input(f"  {C_GREEN}[+]{C_RESET} Ingrese la dirección del taller asignado: ")
-            while taller == "":
+            while taller == "": #VALIDACIÓN DE LA DIRECCIÓN DEL TALLER
                 mostrar_encabezado("REGISTRO DE SINIESTRO", mostrar_uf=True)
                 print(f"      {C_RED}[!] Error: La dirección no puede estar vacía.{C_RESET}")
                 taller = input(f"  {C_GREEN}[+]{C_RESET} Ingrese la dirección del taller asignado: ")
@@ -508,8 +519,8 @@ def siniestro(vehiculos, polizas, siniestros):
             fecha_rep_valida = False
             while not fecha_rep_valida:
                 fecha_rep = input(f"  {C_GREEN}[+]{C_RESET} Ingrese fecha estimada de reparación (DD/MM/AAAA): ")
-                try:
-                    fecha_reparacion = datetime.strptime(fecha_rep, "%d/%m/%Y").date()
+                try: 
+                    fecha_reparacion = datetime.strptime(fecha_rep, "%d/%m/%Y").date() #TRANSFORMACIÓN DE LA FECHA ESTIMADA DE REPARACIÓN A DATE
                     fecha_rep_valida = True
                 except ValueError:
                     mostrar_encabezado("REGISTRO DE SINIESTRO", mostrar_uf=True)
@@ -518,18 +529,18 @@ def siniestro(vehiculos, polizas, siniestros):
             patente = "N/A"
             fecha_reparacion = None
             taller = input(f"  {C_GREEN}[+]{C_RESET} Ingrese el lugar de ocurrencia/institución: ")
-            while taller == "":
+            while taller == "": #VALIDACIÓN DE LUGAR DE OCURRENCIA DE SINIESTRO
                 mostrar_encabezado("REGISTRO DE SINIESTRO", mostrar_uf=True)
                 print(f"      {C_RED}[!] Error: El lugar no puede estar vacío.{C_RESET}")
                 taller = input(f"  {C_GREEN}[+]{C_RESET} Ingrese el lugar de ocurrencia/institución: ")
 
-        # Menú interno para consultar el estado de pago del siniestro
-        pago_valido = False
-        while not pago_valido:
+        #MENU INTERNO PARA CONSULTAR EL ESTADO DE PAGO DEL SINIESTRO
+        pago_valido = False 
+        while not pago_valido: #VERIIFICAR ESTADO DE PAGO DEL SINIESTRO
             print(f"\n  {C_YELLOW}Estado de pago del siniestro:{C_RESET}")
             print(f"    [{C_CYAN}1{C_RESET}] Siniestro Pagado")
             print(f"    [{C_CYAN}2{C_RESET}] Pendiente de pago")
-            try:
+            try: 
                 opc_pago = int(input(f"  {C_GREEN}[+]{C_RESET} Opción: "))
                 if opc_pago == 1:
                     estado_pago = "Pagado"
@@ -565,6 +576,7 @@ def siniestro(vehiculos, polizas, siniestros):
             monto_pagado = 0
             print(f"      {C_CYAN}[i] Siniestro registrado como pendiente (Monto actual: 0 UF).{C_RESET}\n")
 
+        #SE GUARDAN LOS DATOS DEL SINIESTRO EN UN DICCIONARIO
         siniestros[numero_declaracion] = {
             "numero_declaracion": numero_declaracion,
             "informacion_siniestro": informacion_siniestro,
@@ -578,7 +590,8 @@ def siniestro(vehiculos, polizas, siniestros):
             "monto_pagado": monto_pagado, 
             "estado_pago": estado_pago    
         }
-        
+
+        #SE RETORNA EL SINIESTRO CREADO PARA GUARDARLO FUERA DE LA FUNCIÓN
         print(f"\n{C_GREEN}══════════════════════════════════════════════════════════════{C_RESET}")
         print(f" {C_GREEN}[✓] ¡Siniestro N° {numero_declaracion} registrado con éxito!{C_RESET}")
         print(f"{C_GREEN}══════════════════════════════════════════════════════════════{C_RESET}\n")
@@ -595,6 +608,7 @@ def siniestro(vehiculos, polizas, siniestros):
 # 2. MÓDULOS DE CONSULTA Y LISTADO
 # ============================================================
 
+#FUNCIÓN PARA CONSULTAR CLIENTE POR RUT E INDICAR PÓLIZAS DE SEGURO ASOCIADAS
 def consultar_usuario(usuarios, polizas):
     """Opción 5: Consulta cliente por RUT e indica pólizas asociadas."""
     mostrar_encabezado("CONSULTAR CLIENTE")
@@ -603,9 +617,10 @@ def consultar_usuario(usuarios, polizas):
         print(f"  {C_YELLOW}⚠ No hay clientes registrados.{C_RESET}")
         input(f"\n{C_BOLD}Presione Enter para regresar...{C_RESET}")
         return
-        
+
+    #VALIDACIÓN EXISTENCIA RUT
     rut = input(f"  {C_GREEN}[+]{C_RESET} Ingrese el RUT a buscar: ")
-    while rut == "" or len(rut) < 8 or len(rut) > 9 or not rut.isdigit():
+    while rut == "" or len(rut) < 8 or len(rut) > 9 or not rut.isdigit(): 
         mostrar_encabezado("CONSULTAR CLIENTE")
         print(f"      {C_RED}[!] Error: El RUT debe tener entre 8 y 9 dígitos.{C_RESET}")
         rut = input(f"  {C_GREEN}[+]{C_RESET} Ingrese el RUT a buscar: ")
@@ -623,7 +638,7 @@ def consultar_usuario(usuarios, polizas):
         print(f"  {C_BOLD}Dirección:{C_RESET}   {cliente['direccion']}")
         print(f"  {C_BOLD}Correo:{C_RESET}      {cliente['correo']}")
         
-        # Búsqueda de pólizas asociadas al RUT
+        #BÚSQUEDA DE PÓLIZAS ASOCIADAS AL RUT
         polizas_asociadas = [p for p in polizas.values() if p['rut_usuario'] == rut]
         if polizas_asociadas:
             print(f"\n  {C_BOLD}Pólizas Asociadas:{C_RESET}")
@@ -637,6 +652,7 @@ def consultar_usuario(usuarios, polizas):
         
     input(f"\n{C_BOLD}Presione Enter para regresar...{C_RESET}")
 
+#FUNCIÓN PARA LISTAR USUARIOS Y MOSTRAR PÓLIZAS VINCULADAS
 def listar_usuarios(usuarios, polizas):
     """Opción 6: Listar todos los clientes y mostrar pólizas vinculadas."""
     mostrar_encabezado("LISTADO DE CLIENTES")
@@ -650,6 +666,7 @@ def listar_usuarios(usuarios, polizas):
     registros_por_pagina = 2
     total_registros = len(lista_ruts)
 
+    #PAGINACIÓN
     for i in range(0, total_registros, registros_por_pagina):
         if i > 0: 
             mostrar_encabezado("LISTADO DE CLIENTES")
@@ -660,6 +677,8 @@ def listar_usuarios(usuarios, polizas):
         print(f"  {C_YELLOW}Página {pagina_actual} de {total_paginas} (Total: {total_registros}){C_RESET}\n")
 
         bloque = lista_ruts[i: i + registros_por_pagina]
+
+        #DESPLIEGUE DATOS USUARIO
         for num, rut in enumerate(bloque, start=i + 1):
             datos = usuarios[rut]
             nombre_completo = f"{datos['nombre']} {datos['apellido_paterno']} {datos['apellido_materno']}"
@@ -671,7 +690,8 @@ def listar_usuarios(usuarios, polizas):
             print(f"      {C_BOLD}Teléfono:{C_RESET}   +56 {datos['telefono']}")
             print(f"      {C_BOLD}Dirección:{C_RESET}  {datos['direccion']}")
             print(f"      {C_BOLD}Correo:{C_RESET}     {datos['correo']}")
-            
+
+            #BUSQUEDA DE PÓLIZAS
             polizas_asociadas = [p for p in polizas.values() if p['rut_usuario'] == rut]
             if polizas_asociadas:
                 print(f"\n      {C_BOLD}Pólizas Contratadas:{C_RESET}")
@@ -689,6 +709,7 @@ def listar_usuarios(usuarios, polizas):
     print(f"\n  {C_GREEN}Fin del listado.{C_RESET}")
     input(f"{C_BOLD}Presione Enter para regresar al menú principal...{C_RESET}")
 
+#FUNCIÓN PARA CONSULTAR VEHICULO POR PATENTE
 def consultar_vehiculo_por_patente(vehiculos, usuarios, polizas):
     """Opción 7: Consulta vehículo por patente e indica si tiene pólizas."""
     mostrar_encabezado("CONSULTAR VEHÍCULO")
@@ -700,7 +721,7 @@ def consultar_vehiculo_por_patente(vehiculos, usuarios, polizas):
 
     try:
         patente = input(f"  {C_GREEN}[+]{C_RESET} Ingrese la patente a buscar: ").strip().upper()
-        while patente == "" or len(patente) < 6 or len(patente) > 7:
+        while patente == "" or len(patente) < 6 or len(patente) > 7: #VALIDACIÓN PATENTE VÁLIDA
             mostrar_encabezado("CONSULTAR VEHÍCULO")
             print(f"      {C_RED}[!] Error: La patente debe tener entre 6 y 7 caracteres.{C_RESET}")
             patente = input(f"  {C_GREEN}[+]{C_RESET} Ingrese la patente a buscar: ").strip().upper()
@@ -714,6 +735,7 @@ def consultar_vehiculo_por_patente(vehiculos, usuarios, polizas):
             propietario = usuarios.get(propietario_rut)
             nombre_propietario = f"{propietario['nombre']} {propietario['apellido_paterno']}" if propietario else "Desconocido"
 
+            #DESPLIEGUE DATOS VEHICULO
             print(f"\n  {C_CYAN}=== DATOS DEL VEHÍCULO ==={C_RESET}")
             print(f"  {C_BOLD}Patente:{C_RESET}     {vehiculo_encontrado['patente']}")
             print(f"  {C_BOLD}Marca:{C_RESET}       {vehiculo_encontrado['marca']}")
@@ -723,7 +745,8 @@ def consultar_vehiculo_por_patente(vehiculos, usuarios, polizas):
             print(f"  {C_BOLD}Chasis:{C_RESET}      {vehiculo_encontrado['chasis']}")
             print(f"  {C_BOLD}Motor:{C_RESET}       {vehiculo_encontrado['motor']}")
             print(f"  {C_BOLD}Propietario:{C_RESET} {nombre_propietario} (RUT: {propietario_rut})")
-            
+
+            #MOSTRAR LAS PÓLIZAS ASOCIADAS A LOS VEHICULOS
             polizas_asociadas = [p for p in polizas.values() if p['patente'] == patente]
             if polizas_asociadas:
                 print(f"\n  {C_BOLD}Pólizas Asociadas:{C_RESET}")
@@ -740,6 +763,8 @@ def consultar_vehiculo_por_patente(vehiculos, usuarios, polizas):
 
     input(f"\n{C_BOLD}Presione Enter para regresar...{C_RESET}")
 
+
+#FUNCIÓN QUE MUESTRA EL LISTADO DE VEHICULOS CON SUS SEGUROS ASOCIADOS
 def listar_vehiculos(vehiculos, usuarios, polizas):
     """Opción 8: Listar todos los vehículos y sus seguros asociados."""
     mostrar_encabezado("LISTADO DE VEHÍCULOS")
@@ -769,13 +794,17 @@ def listar_vehiculos(vehiculos, usuarios, polizas):
             propietario = usuarios.get(propietario_rut)
             nombre_prop = f"{propietario['nombre']} {propietario['apellido_paterno']}" if propietario else "Desconocido"
 
+
+            #LISTAR LOS VEHICULOS
             print(f"  {C_CYAN}[{num}] Patente: {datos['patente']}{C_RESET}")
             print(f"      {C_BOLD}Marca:{C_RESET}       {datos['marca']}")
             print(f"      {C_BOLD}Modelo:{C_RESET}      {datos['modelo']}")
             print(f"      {C_BOLD}Año:{C_RESET}         {datos['anio']}")
             print(f"      {C_BOLD}Color:{C_RESET}       {datos['color']}")
             print(f"      {C_BOLD}Propietario:{C_RESET} {nombre_prop}")
-            
+
+
+            #MOSTRAR PÓLIZAS ASOCIADASA LOS VEHICULOS
             polizas_asociadas = [p for p in polizas.values() if p['patente'] == pat]
             if polizas_asociadas:
                 print(f"\n      {C_BOLD}Pólizas Vinculadas:{C_RESET}")
@@ -793,6 +822,7 @@ def listar_vehiculos(vehiculos, usuarios, polizas):
     print(f"\n  {C_GREEN}Fin del listado.{C_RESET}")
     input(f"{C_BOLD}Presione Enter para regresar al menú principal...{C_RESET}")
 
+#FUNCIÓN PARA CONSULTAR PÓLIZA POR SU NÚMERO IDENTIFICADOR
 def consultar_poliza(polizas):
     """Opción 9: Consultar póliza por número."""
     mostrar_encabezado("CONSULTAR PÓLIZA", mostrar_uf=True)
@@ -824,7 +854,8 @@ def consultar_poliza(polizas):
         cobert_uf = poliza_encontrada['cobertura']
         tipo_seg = poliza_encontrada['tipo_seguro']
         color_est = C_GREEN if poliza_encontrada['estado'].lower() == 'vigente' else C_RED
-        
+
+        #LISTAR PÓLIZA CONSULTADA
         print(f"\n  {C_CYAN}=== DATOS DE LA PÓLIZA ==={C_RESET}")
         print(f"  {C_BOLD}Tipo de seguro:{C_RESET} {tipo_seg}")
         if tipo_seg == "Automotriz":
@@ -840,6 +871,7 @@ def consultar_poliza(polizas):
         
     input(f"\n{C_BOLD}Presione Enter para regresar...{C_RESET}")
 
+#FUNCIÓN PARA LISTAR PÓLIZAS CON SU ESTADO Y VIGENCIA
 def listar_polizas(polizas):
     """Opción 10: Listar todas las pólizas con su estado y vigencia."""
     mostrar_encabezado("LISTADO DE PÓLIZAS", mostrar_uf=True)
@@ -863,6 +895,8 @@ def listar_polizas(polizas):
         print(f"  {C_YELLOW}Página {pagina_actual} de {total_paginas} (Total: {total_registros}){C_RESET}\n")
 
         bloque = lista_ids[i: i + registros_por_pagina]
+
+        #LISTAR PÓLIZAS CON ESTADO Y VIGENCIA
         for num, id_pol in enumerate(bloque, start=i + 1):
             datos = polizas[id_pol]
             tipo_seg = datos['tipo_seguro']
@@ -884,6 +918,7 @@ def listar_polizas(polizas):
     print(f"\n  {C_GREEN}Fin del listado.{C_RESET}")
     input(f"{C_BOLD}Presione Enter para regresar al menú principal...{C_RESET}")
 
+#FUNCIÓN PARA CONSULTAR SINIESTRO POR NÚMERO IDENTIFICADOR
 def consultar_siniestro(siniestros):
     """Opción 11: Consultar siniestro por número."""
     mostrar_encabezado("CONSULTAR SINIESTRO", mostrar_uf=True)
@@ -914,11 +949,13 @@ def consultar_siniestro(siniestros):
         monto_uf = siniestro_encontrado.get('monto_pagado', 0)
         tipo_seg = siniestro_encontrado.get('tipo_seguro', 'Desconocido')
         estado_pago = siniestro_encontrado.get('estado_pago', 'Pendiente de pago')
-        
+
+        #LISTAR DATOS DEL SINIESTRO
         print(f"\n  {C_CYAN}=== DATOS DEL SINIESTRO ==={C_RESET}")
         print(f"  {C_BOLD}Tipo de Seguro:{C_RESET}   {tipo_seg}")
         print(f"  {C_BOLD}Póliza Asociada:{C_RESET}  {siniestro_encontrado['poliza_asociada']}")
-        
+
+        #CASO DE QUE EL SEGURO FUERA AUTOMOTRIZ
         if tipo_seg == "Automotriz":
             fecha_rep = siniestro_encontrado['fecha_reparacion'].strftime('%d/%m/%Y') if siniestro_encontrado.get('fecha_reparacion') else "N/A"
             print(f"  {C_BOLD}Patente Vehículo:{C_RESET} {siniestro_encontrado['patente']}")
@@ -930,7 +967,8 @@ def consultar_siniestro(siniestros):
         print(f"  {C_BOLD}RUT Siniestrado:{C_RESET}  {siniestro_encontrado['rut_siniestrado']}")
         print(f"  {C_BOLD}Fecha Ocurrencia:{C_RESET} {siniestro_encontrado['fecha_siniestro'].strftime('%d/%m/%Y')}")
         print(f"  {C_BOLD}Descripción:{C_RESET}      {siniestro_encontrado['informacion_siniestro']}")
-        
+
+        #CASO DE QUE EL SEGURO SE ENCUENTRE PAGADO
         if estado_pago == "Pagado":
             print(f"  {C_BOLD}Estado Financiero:{C_RESET}{C_GREEN} Pagado{C_RESET}")
             print(f"  {C_BOLD}Monto Pagado:{C_RESET}     {monto_uf} UF  ->  {C_GREEN}{formato_clp(uf_a_clp(monto_uf))}{C_RESET}")
@@ -942,6 +980,7 @@ def consultar_siniestro(siniestros):
 
     input(f"\n{C_BOLD}Presione Enter para regresar...{C_RESET}")
 
+#FUNCIÓN PARA LISTAR TODOS LOS SINIESTROS
 def listar_siniestros(siniestros):
     """Opción 12: Listar todos los siniestros."""
     mostrar_encabezado("LISTADO DE SINIESTROS", mostrar_uf=True)
@@ -970,7 +1009,8 @@ def listar_siniestros(siniestros):
             monto_uf = datos.get('monto_pagado', 0)
             tipo_seg = datos.get('tipo_seguro', 'Desconocido')
             estado_pago = datos.get('estado_pago', 'Pendiente de pago')
-            
+
+            #LISTAR SINIESTROS
             print(f"  {C_CYAN}[{num}] Siniestro N°: {datos['numero_declaracion']}{C_RESET}")
             print(f"      {C_BOLD}Póliza Asociada:{C_RESET}  {datos['poliza_asociada']} ({tipo_seg})")
             if tipo_seg == "Automotriz":
@@ -998,6 +1038,7 @@ def listar_siniestros(siniestros):
 # 3. MÓDULOS FINANCIEROS Y DE BALANCE
 # ============================================================
 
+#FUNCIÓN PARA MOSTRAR EL MONTO TOTAL DE PÓLIZAS VENDDIDAS POR TIPO
 def mostrar_monto_polizas(polizas):
     """Opción 13: Mostrar monto total de pólizas vendidas por tipo."""
     mostrar_encabezado("MONTO TOTAL DE PÓLIZAS VENDIDAS", mostrar_uf=True)
@@ -1005,6 +1046,7 @@ def mostrar_monto_polizas(polizas):
     total_uf_automotriz = 0
     total_uf_vida = 0
 
+    #SE HACE LA SUMA DE LOS VALORES DE LAS PÓLIZAS POR TIPO
     for p in polizas.values():
         if p['tipo_seguro'] == "Automotriz":
             total_uf_automotriz += p['valor_anual']
@@ -1013,6 +1055,7 @@ def mostrar_monto_polizas(polizas):
 
     total_uf_general = total_uf_automotriz + total_uf_vida
 
+    #SE MUESTRA EL RESUMEN DE LAS PÓLIZAS
     print(f"  {C_CYAN}=== RESUMEN DE VENTAS ==={C_RESET}\n")
     
     print(f"  {C_YELLOW}■ SEGURO AUTOMOTRIZ{C_RESET}")
@@ -1030,15 +1073,18 @@ def mostrar_monto_polizas(polizas):
     
     input(f"\n{C_BOLD}Presione Enter para regresar...{C_RESET}")
 
+#FUNCIÓN PARA MOSTRAR EL MONTO TOTAL DE SINIESTROS PAGADOS
 def mostrar_monto_siniestros(siniestros):
     """Opción 14: Mostrar monto total de siniestros pagados."""
     mostrar_encabezado("MONTO TOTAL DE SINIESTROS PAGADOS", mostrar_uf=True)
 
     total_uf_siniestros = 0
+    #SE HACE LA SUMA DE LOS MONTOS DE LOS SINIESTROS
     for s in siniestros.values():
         if s.get('estado_pago') == "Pagado":
             total_uf_siniestros += s.get('monto_pagado', 0)
 
+    #LISTAR RESUMEN DE COSTOS POR SINIESTROS
     print(f"  {C_CYAN}=== RESUMEN DE DESEMBOLSOS ==={C_RESET}\n")
     print(f"  {C_BOLD}Total Desembolsado en UF:{C_RESET}  {total_uf_siniestros}")
     print(f"  {C_BOLD}Equivalente Total en CLP:{C_RESET}  {C_GREEN}{formato_clp(uf_a_clp(total_uf_siniestros))}{C_RESET}")
@@ -1047,6 +1093,7 @@ def mostrar_monto_siniestros(siniestros):
     
     input(f"\n{C_BOLD}Presione Enter para regresar...{C_RESET}")
 
+#FUNCIÓN PARA MOSTRAR EL RESUMEN DE INGRESOS/GASTOS
 def mostrar_balance_general(polizas, siniestros):
     """Opción 15: Balance de Ingresos vs Gastos y Reporte de Ventas por Agente."""
     mostrar_encabezado("BALANCE GENERAL Y VENTAS POR AGENTE", mostrar_uf=True)
@@ -1055,7 +1102,7 @@ def mostrar_balance_general(polizas, siniestros):
     gastos_uf = sum(s.get('monto_pagado', 0) for s in siniestros.values() if s.get('estado_pago') == "Pagado")
     balance_uf = ingresos_uf - gastos_uf
 
-    # Calcular ventas por agente
+    #CALCULAR VENTAS POR AGENTE
     ventas_agentes = {}
     for p in polizas.values():
         ag = p['rut_agente']
@@ -1065,10 +1112,11 @@ def mostrar_balance_general(polizas, siniestros):
     if not ventas_agentes:
         print(f"    {C_YELLOW}No hay ventas registradas en el sistema.{C_RESET}")
     else:
-        # Ordenamos los agentes de mayor a menor venta
+        #ORDENAR AGENTES DE MAYOR A MENOR VENTA
         for ag, monto in sorted(ventas_agentes.items(), key=lambda x: x[1], reverse=True):
             print(f"    {C_BOLD}Agente RUT {ag}:{C_RESET} {monto} UF ({C_GREEN}{formato_clp(uf_a_clp(monto))}{C_RESET})")
-    
+
+    #LISTAR BALANCE GENERAL
     print(f"\n  {C_CYAN}=== BALANCE GENERAL ==={C_RESET}")
     print(f"  {C_BOLD}Total Ingresos (Pólizas Vendidas):{C_RESET} {ingresos_uf} UF")
     print(f"  {C_BOLD}Total Gastos (Siniestros Pagados):{C_RESET} {gastos_uf} UF")
@@ -1085,10 +1133,10 @@ def mostrar_balance_general(polizas, siniestros):
 # ============================================================
 # VARIABLES GLOBALES DEL SISTEMA
 # ============================================================
-usuarios = {}
-vehiculos = {}
-polizas = {}
-siniestros = {}
+usuarios = {}   #GUARDA LOS USUARIOS CREADOS
+vehiculos = {}  #GUARDA LOS VEHICULOS CREADOS
+polizas = {}    #GUARDA LAS PÓLIZAS CREADAS
+siniestros = {} #GUARDA LOS SINIESTROS CREADOS
 
 
 # ============================================================

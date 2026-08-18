@@ -327,7 +327,6 @@ while True:
     
     try:
         opcion = int(input("Ingrese su opción: "))
-        os.system("cls")
     except ValueError:
         print("\n¡Error! Debes ingresar un número entero.")
         input("Presiona Enter para reintentar...")
