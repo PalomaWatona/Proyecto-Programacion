@@ -1,6 +1,8 @@
 from datetime import datetime
 import calendar
 import os
+import csv
+import json
 
 # ============================================================
 # COLORES Y ESTILOS PARA LA INTERFAZ
@@ -1131,12 +1133,101 @@ def mostrar_balance_general(polizas, siniestros):
 
 
 # ============================================================
+# PERSISTENCIA DE DATOS (EXPORTAR / IMPORTAR EN CSV)
+# ============================================================
+ARCHIVO_DATOS = "datos_sistema.csv"
+
+#CAMPOS QUE CORRESPONDEN A FECHAS (SE GUARDAN COMO date Y HAY QUE RECONVERTIRLOS AL IMPORTAR)
+CAMPOS_FECHA = {
+    "usuario": ["fecha_nacimiento"],
+    "vehiculo": [],
+    "poliza": ["fecha_inicio", "fecha_fin"],
+    "siniestro": ["fecha_siniestro", "fecha_reparacion"]
+}
+
+def _convertir_fechas_a_texto(datos):
+    """Devuelve una copia del diccionario con los objetos date convertidos a texto (YYYY-MM-DD)."""
+    copia = {}
+    for clave, valor in datos.items():
+        if hasattr(valor, "isoformat"): #DETECTA OBJETOS date/datetime
+            copia[clave] = valor.isoformat()
+        else:
+            copia[clave] = valor
+    return copia
+
+def _convertir_texto_a_fechas(tipo, datos):
+    """Reconvierte a objetos date los campos que correspondan según el tipo de registro."""
+    for campo in CAMPOS_FECHA.get(tipo, []):
+        valor = datos.get(campo)
+        if valor: #SI NO ES None NI VACÍO
+            datos[campo] = datetime.strptime(valor, "%Y-%m-%d").date()
+    return datos
+
+def exportar_datos(usuarios, vehiculos, polizas, siniestros, archivo=ARCHIVO_DATOS):
+    """Exporta los 4 diccionarios del sistema a un único archivo CSV.
+    Cada fila guarda: tipo de registro, su clave original y sus datos en formato JSON."""
+    try:
+        with open(archivo, mode="w", newline="", encoding="utf-8") as f:
+            escritor = csv.writer(f)
+            escritor.writerow(["tipo", "clave", "datos"]) #ENCABEZADO
+
+            for rut, datos in usuarios.items():
+                escritor.writerow(["usuario", rut, json.dumps(_convertir_fechas_a_texto(datos), ensure_ascii=False)])
+
+            for patente, datos in vehiculos.items():
+                escritor.writerow(["vehiculo", patente, json.dumps(_convertir_fechas_a_texto(datos), ensure_ascii=False)])
+
+            for id_poliza, datos in polizas.items():
+                escritor.writerow(["poliza", id_poliza, json.dumps(_convertir_fechas_a_texto(datos), ensure_ascii=False)])
+
+            for numero, datos in siniestros.items():
+                escritor.writerow(["siniestro", numero, json.dumps(_convertir_fechas_a_texto(datos), ensure_ascii=False)])
+
+        print(f"\n{C_GREEN}  [✓] Datos exportados correctamente en '{archivo}'.{C_RESET}")
+    except Exception as error:
+        print(f"\n{C_RED}  [!] Error al exportar los datos: {error}{C_RESET}")
+
+def importar_datos(archivo=ARCHIVO_DATOS):
+    """Importa los 4 diccionarios del sistema desde el archivo CSV, si es que existe.
+    Si el archivo no existe (primera ejecución), retorna diccionarios vacíos."""
+    usuarios, vehiculos, polizas, siniestros = {}, {}, {}, {}
+
+    if not os.path.exists(archivo):
+        return usuarios, vehiculos, polizas, siniestros
+
+    try:
+        with open(archivo, mode="r", newline="", encoding="utf-8") as f:
+            lector = csv.reader(f)
+            next(lector, None) #SE SALTA LA FILA DE ENCABEZADO
+
+            for fila in lector:
+                if len(fila) != 3: #IGNORA FILAS MAL FORMADAS
+                    continue
+
+                tipo, clave, datos_json = fila
+                datos = json.loads(datos_json)
+                datos = _convertir_texto_a_fechas(tipo, datos)
+
+                if tipo == "usuario":
+                    usuarios[clave] = datos
+                elif tipo == "vehiculo":
+                    vehiculos[clave] = datos
+                elif tipo == "poliza":
+                    polizas[int(clave)] = datos
+                elif tipo == "siniestro":
+                    siniestros[int(clave)] = datos
+
+        print(f"{C_GREEN}  [✓] Datos importados correctamente desde '{archivo}'.{C_RESET}")
+    except Exception as error:
+        print(f"{C_RED}  [!] Error al importar los datos: {error}{C_RESET}")
+
+    return usuarios, vehiculos, polizas, siniestros
+
+
+# ============================================================
 # VARIABLES GLOBALES DEL SISTEMA
 # ============================================================
-usuarios = {}   #GUARDA LOS USUARIOS CREADOS
-vehiculos = {}  #GUARDA LOS VEHICULOS CREADOS
-polizas = {}    #GUARDA LAS PÓLIZAS CREADAS
-siniestros = {} #GUARDA LOS SINIESTROS CREADOS
+usuarios, vehiculos, polizas, siniestros = importar_datos() #SE CARGAN LOS DATOS GUARDADOS AL INICIAR EL PROGRAMA
 
 
 # ============================================================
@@ -1224,6 +1315,7 @@ while True:
     elif opcion == 15:
         mostrar_balance_general(polizas, siniestros)
     elif opcion == 0:
+        exportar_datos(usuarios, vehiculos, polizas, siniestros) #SE GUARDAN LOS DATOS ANTES DE SALIR
         limpiar_consola()
         print(f"{C_CYAN}╔════════════════════════════════════════════════════════════╗{C_RESET}")
         print(f"{C_CYAN}║           Gracias por utilizar el sistema. ¡Adiós!         ║{C_RESET}")
